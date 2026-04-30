@@ -15,6 +15,20 @@ public class MemberResDTO {
         private Long memberId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class HomeRes {
+        private String name;
+    }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RequestBody {
+        private String stringTest;
+        private Long longTest;
+    }
 }

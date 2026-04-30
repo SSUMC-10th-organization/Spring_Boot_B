@@ -15,7 +15,8 @@ public class MemberReqDTO {
             Long foodCategoryId
     ) {}
 
-
-
-
+    public record RequestBody(
+            String stringTest,
+            Long longTest
+    ) {}
 }
