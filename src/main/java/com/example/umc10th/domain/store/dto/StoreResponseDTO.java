@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.mission.dto;
+package com.example.umc10th.domain.store.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class MissionResponseDTO {
+public class StoreResponseDTO {
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ChallengeResultDto {
-        private Long memberMissionId;
+    public static class ReviewResultDto {
+        private Long reviewId;
         private LocalDateTime createdAt;
     }
 }
