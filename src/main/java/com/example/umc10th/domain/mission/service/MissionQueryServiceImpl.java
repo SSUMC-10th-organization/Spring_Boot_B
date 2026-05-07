@@ -29,7 +29,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
     @Override
     public Page<MemberMission> getMemberMissions(Long memberId, Boolean isComplete, Integer page) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
         
         PageRequest pageRequest = PageRequest.of(page, 10);
         return memberMissionRepository.findAllByMemberAndIsComplete(member, isComplete, pageRequest);
@@ -38,7 +38,7 @@ public class MissionQueryServiceImpl implements MissionQueryService {
     @Override
     public Page<Mission> getMissionsByLocation(Long locationId, Integer page) {
         Location location = locationRepository.findById(locationId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.LOCATION_NOT_FOUND));
         
         PageRequest pageRequest = PageRequest.of(page, 10);
         return missionRepository.findAllByStore_Location(location, pageRequest);

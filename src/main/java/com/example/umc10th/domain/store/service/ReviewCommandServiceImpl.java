@@ -25,10 +25,10 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     @Override
     public Review createReview(Long memberId, Long storeId, StoreRequestDTO.ReviewDto request) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
         
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new GeneralException(ErrorStatus.STORE_NOT_FOUND));
 
         Review review = Review.builder()
                 .member(member)
