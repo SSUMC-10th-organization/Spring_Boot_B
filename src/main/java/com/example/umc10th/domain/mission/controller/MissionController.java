@@ -1,43 +1,64 @@
 package com.example.umc10th.domain.mission.controller;
 
-import com.example.umc10th.domain.mission.dto.MissionReqDTO;
-import com.example.umc10th.domain.mission.dto.MissionResDTO;
-import com.example.umc10th.global.apiPayload.ApiResponse;
-import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
-@RequestMapping("/api/v1/missions")
+@RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class MissionController {
 
-    @PostMapping
-    public ApiResponse<MissionResDTO.CreateMissionResponse> createMission(
-            @RequestBody MissionReqDTO.CreateMissionRequest request
-    ) {
-        MissionResDTO.CreateMissionResponse response =
-                MissionResDTO.CreateMissionResponse.builder()
-                        .missionId(1L)
-                        .title(request.title())
-                        .point(request.point())
-                        .restaurantId(request.restaurantId())
-                        .build();
+    private final MissionService missionService;
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.MISSION_CREATE_SUCCESS, response);
+    // 식당별 미션 목록
+    @GetMapping("/restaurants/{restaurantId}/missions")
+    public ApiResponse<Page<MissionResponseDto.MissionResult>> getMissions(
+            @PathVariable Long restaurantId,
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Mission> missions =
+                missionService.getMissionsByRestaurant(restaurantId, pageable);
+        return ApiResponse.onSuccess(
+                missions.map(MissionConverter::toMissionResult)
+        );
     }
 
-    @PostMapping("/detail")
-    public ApiResponse<MissionResDTO.GetMissionResponse> getMission(
-            @RequestBody MissionReqDTO.GetMissionRequest request
+    // 내 미션 목록
+    @GetMapping("/members/my/missions")
+    public ApiResponse<Page<MissionResponseDto.MyMissionResult>> getMyMissions(
+            @RequestParam MissionStatus status,
+            @RequestParam Long userId,            // 나중에 @AuthenticationPrincipal
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        MissionResDTO.GetMissionResponse response =
-                MissionResDTO.GetMissionResponse.builder()
-                        .missionId(request.missionId())
-                        .title("음식점 리뷰 작성하기")
-                        .content("해당 음식점에서 식사 후 리뷰를 작성하는 미션입니다.")
-                        .point(500)
-                        .status("진행 가능")
-                        .build();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserMission> userMissions =
+                missionService.getMyMissions(userId, status, pageable);
+        return ApiResponse.onSuccess(
+                userMissions.map(MissionConverter::toMyMissionResult)
+        );
+    }
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.MISSION_GET_SUCCESS, response);
+    // 미션 도전 시작
+    @PostMapping("/missions/{missionId}/start")
+    public ApiResponse<MissionResponseDto.UserMissionResult> startMission(
+            @PathVariable Long missionId,
+            @RequestParam Long userId
+    ) {
+        UserMission userMission = missionService.startMission(userId, missionId);
+        return ApiResponse.onSuccess(
+                MissionConverter.toUserMissionResult(userMission)
+        );
+    }
+
+    // 미션 성공
+    @PatchMapping("/user-missions/{userMissionId}/complete")
+    public ApiResponse<MissionResponseDto.UserMissionResult> completeMission(
+            @PathVariable Long userMissionId,
+            @RequestParam Long userId
+    ) {
+        UserMission userMission = missionService.completeMission(userMissionId, userId);
+        return ApiResponse.onSuccess(
+                MissionConverter.toUserMissionResult(userMission)
+        );
     }
 }
