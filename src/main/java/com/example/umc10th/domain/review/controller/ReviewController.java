@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ReviewController {
-  private ReviewService reviewService;
+  private final ReviewService reviewService;
 
   @PostMapping("/stores/{storeId}/reviews")
-  public ApiResponse<Void> createReview(
+  public ApiResponse<Long> createReview(
       @PathVariable Long storeId,
       @RequestBody ReviewCreateReqDTO request
   ){
-    return ApiResponse.onSuccess(GeneralSuccessCode.OK, reviewService.createReview());
+    Long reviewId = reviewService.createReview(storeId, request);
+    return ApiResponse.onSuccess(GeneralSuccessCode.OK, reviewId);
   }
 }
