@@ -1,19 +1,18 @@
-package org.example.erd.domain.member.exception.code;
+package org.example.erd.domain.auth.exception.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.erd.global.apiPayload.code.BaseErrorCode;
+import org.example.erd.global.apiPayload.code.BaseSuccessCode;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MemberErrorCode implements BaseErrorCode {
+public enum AuthSuccessCode implements BaseSuccessCode {
 
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404_1","존재하지 않는 멤버입니다."),
-    ;
+    SIGNUP_SUCCESS(HttpStatus.CREATED, "MEMBER201_1", "회원가입이 완료되었습니다.");
 
     private final HttpStatus status;
     private final String code;
     private final String message;
-
 }

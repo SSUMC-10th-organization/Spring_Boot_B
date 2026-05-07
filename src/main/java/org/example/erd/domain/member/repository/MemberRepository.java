@@ -1,4 +1,9 @@
 package org.example.erd.domain.member.repository;
 
-public interface MemberRepository {
+
+import org.example.erd.domain.member.entity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
 }
