@@ -26,7 +26,7 @@ public class MissionController {
     @GetMapping("/members/my/missions")
     public ApiResponse<Page<MissionResponseDto.MyMissionResult>> getMyMissions(
             @RequestParam MissionStatus status,
-            @RequestParam Long userId,            // 나중에 @AuthenticationPrincipal
+            @RequestParam Long userId,           
             @RequestParam(defaultValue = "0")  int page,
             @RequestParam(defaultValue = "10") int size
     ) {
