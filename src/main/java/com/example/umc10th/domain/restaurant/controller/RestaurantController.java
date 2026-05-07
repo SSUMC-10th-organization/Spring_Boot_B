@@ -1,43 +1,34 @@
 package com.example.umc10th.domain.restaurant.controller;
 
-import com.example.umc10th.domain.restaurant.dto.RestaurantReqDTO;
-import com.example.umc10th.domain.restaurant.dto.RestaurantResDTO;
-import com.example.umc10th.global.apiPayload.ApiResponse;
-import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/v1/restaurants")
+@RequiredArgsConstructor
 public class RestaurantController {
 
-    @PostMapping
-    public ApiResponse<RestaurantResDTO.CreateRestaurantResponse> createRestaurant(
-            @RequestBody RestaurantReqDTO.CreateRestaurantRequest request
-    ) {
-        RestaurantResDTO.CreateRestaurantResponse response =
-                RestaurantResDTO.CreateRestaurantResponse.builder()
-                        .restaurantId(1L)
-                        .name(request.name())
-                        .address(request.address())
-                        .category(request.category())
-                        .build();
+    private final RestaurantService restaurantService;
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.RESTAURANT_CREATE_SUCCESS, response);
+    // 주변 식당 목록 조회
+    @GetMapping("/nearby")
+    public ApiResponse<Page<RestaurantResponseDto.RestaurantResult>> getNearby(
+            @RequestParam Long locationId,
+            @RequestParam(defaultValue = "0")  int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Restaurant> restaurants =
+                restaurantService.getRestaurantsByLocation(locationId, pageable);
+        return ApiResponse.onSuccess(
+                restaurants.map(RestaurantConverter::toRestaurantResult)
+        );
     }
 
-    @PostMapping("/detail")
-    public ApiResponse<RestaurantResDTO.GetRestaurantResponse> getRestaurant(
-            @RequestBody RestaurantReqDTO.GetRestaurantRequest request
+    // 식당 상세 조회
+    @GetMapping("/{restaurantId}")
+    public ApiResponse<RestaurantResponseDto.RestaurantDetailResult> getDetail(
+            @PathVariable Long restaurantId
     ) {
-        RestaurantResDTO.GetRestaurantResponse response =
-                RestaurantResDTO.GetRestaurantResponse.builder()
-                        .restaurantId(request.restaurantId())
-                        .name("맛있는 식당")
-                        .address("서울특별시 동작구")
-                        .category("한식")
-                        .score(4.5)
-                        .build();
-
-        return ApiResponse.onSuccess(GeneralSuccessCode.RESTAURANT_GET_SUCCESS, response);
+        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
+        return ApiResponse.onSuccess(
+                RestaurantConverter.toRestaurantDetailResult(restaurant)
+        );
     }
-}
