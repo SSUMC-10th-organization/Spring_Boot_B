@@ -14,10 +14,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import com.example.umc10th.validation.annotation.CheckPage;
+import org.springframework.validation.annotation.Validated;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/missions")
+@Validated
 @Tag(name = "Mission API", description = "미션 관련 API")
 public class MissionController {
 
@@ -45,7 +48,7 @@ public class MissionController {
     public ApiResponse<MissionResponseDTO.MemberMissionListDto> getMemberMissions(
             @PathVariable Long memberId,
             @RequestParam(name = "isComplete") Boolean isComplete,
-            @RequestParam(name = "page", defaultValue = "0") Integer page) {
+            @CheckPage @RequestParam(name = "page", defaultValue = "0") Integer page) {
         
         Page<MemberMission> missionPage = missionQueryService.getMemberMissions(memberId, isComplete, page);
         return ApiResponse.onSuccess(MissionConverter.toMemberMissionListDto(missionPage));
@@ -59,7 +62,7 @@ public class MissionController {
     })
     public ApiResponse<MissionResponseDTO.MissionListDto> getMissionsByLocation(
             @PathVariable Long locationId,
-            @RequestParam(name = "page", defaultValue = "0") Integer page) {
+            @CheckPage @RequestParam(name = "page", defaultValue = "0") Integer page) {
         
         Page<Mission> missionPage = missionQueryService.getMissionsByLocation(locationId, page);
         return ApiResponse.onSuccess(MissionConverter.toMissionListDto(missionPage));

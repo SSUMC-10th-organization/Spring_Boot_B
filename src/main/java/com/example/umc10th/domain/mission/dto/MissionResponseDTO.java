@@ -57,7 +57,7 @@ public class MissionResponseDTO {
         @Schema(description = "성공 시 획득 포인트", example = "500")
         private Integer point;
         @Schema(description = "미션 조건", example = "10,000원 이상 식사시")
-        private String conditional;
+        private String condition;
         @Schema(description = "미션 기한")
         private LocalDate deadline;
     }

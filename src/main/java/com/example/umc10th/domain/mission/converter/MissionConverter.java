@@ -23,7 +23,7 @@ public class MissionConverter {
                 .missionId(mission.getId())
                 .storeName(mission.getStore().getName())
                 .point(mission.getPoint())
-                .conditional(mission.getConditional())
+                .condition(mission.getCondition())
                 .deadline(mission.getDeadline())
                 .build();
     }
@@ -48,8 +48,8 @@ public class MissionConverter {
                 .memberMissionId(memberMission.getId())
                 .storeName(memberMission.getMission().getStore().getName())
                 .point(memberMission.getMission().getPoint())
-                .conditional(memberMission.getMission().getConditional())
-                .isComplete(memberMission.getIsComplete())
+                .conditional(memberMission.getMission().getCondition())
+                .isComplete(memberMission.getComplete())
                 .build();
     }
 

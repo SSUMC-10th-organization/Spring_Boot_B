@@ -21,7 +21,10 @@ public enum ErrorStatus implements BaseErrorCode {
     LOCATION_NOT_FOUND(HttpStatus.NOT_FOUND, "LOCATION404", "존재하지 않는 지역입니다."),
     
     // Mission Error
-    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "존재하지 않는 미션입니다.");
+    MISSION_NOT_FOUND(HttpStatus.NOT_FOUND, "MISSION404", "존재하지 않는 미션입니다."),
+    
+    // Validation Error
+    PAGE_UNDER_ZERO(HttpStatus.BAD_REQUEST, "PAGE400", "페이지 번호는 0 이상이어야 합니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

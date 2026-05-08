@@ -28,11 +28,9 @@ public class MissionQueryServiceImpl implements MissionQueryService {
 
     @Override
     public Page<MemberMission> getMemberMissions(Long memberId, Boolean isComplete, Integer page) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
         
         PageRequest pageRequest = PageRequest.of(page, 10);
-        return memberMissionRepository.findAllByMemberAndIsComplete(member, isComplete, pageRequest);
+        return memberMissionRepository.findAllByMemberIdAndComplete(memberId, isComplete, pageRequest);
     }
 
     @Override

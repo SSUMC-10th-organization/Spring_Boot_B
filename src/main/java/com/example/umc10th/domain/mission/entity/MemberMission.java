@@ -28,5 +28,5 @@ public class MemberMission extends BaseEntity {
 
     @Column(name = "is_complete", nullable = false, columnDefinition = "bit(1)")
     @ColumnDefault("0")
-    private Boolean isComplete;
+    private Boolean complete;
 }
