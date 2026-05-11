@@ -39,9 +39,9 @@ public class MissionResponseDTO {
         @Schema(description = "전체 데이터 개수", example = "42")
         private Long totalElements;
         @Schema(description = "첫 페이지 여부", example = "true")
-        private Boolean isFirst;
+        private Boolean first;
         @Schema(description = "마지막 페이지 여부", example = "false")
-        private Boolean isLast;
+        private Boolean last;
     }
 
     @Builder
@@ -77,9 +77,9 @@ public class MissionResponseDTO {
         @Schema(description = "전체 데이터 개수", example = "42")
         private Long totalElements;
         @Schema(description = "첫 페이지 여부", example = "true")
-        private Boolean isFirst;
+        private Boolean first;
         @Schema(description = "마지막 페이지 여부", example = "false")
-        private Boolean isLast;
+        private Boolean last;
     }
 
     @Builder
@@ -97,6 +97,6 @@ public class MissionResponseDTO {
         @Schema(description = "미션 조건", example = "10,000원 이상 식사시")
         private String conditional;
         @Schema(description = "미션 완료 여부", example = "false")
-        private Boolean isComplete;
+        private Boolean complete;
     }
 }

@@ -38,8 +38,8 @@ public class MissionConverter {
                 .listSize(missionPage.getSize())
                 .totalPage(missionPage.getTotalPages())
                 .totalElements(missionPage.getTotalElements())
-                .isFirst(missionPage.isFirst())
-                .isLast(missionPage.isLast())
+                .first(missionPage.isFirst())
+                .last(missionPage.isLast())
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class MissionConverter {
                 .storeName(memberMission.getMission().getStore().getName())
                 .point(memberMission.getMission().getPoint())
                 .conditional(memberMission.getMission().getCondition())
-                .isComplete(memberMission.getComplete())
+                .complete(memberMission.getComplete())
                 .build();
     }
 
@@ -63,8 +63,8 @@ public class MissionConverter {
                 .listSize(memberMissionPage.getSize())
                 .totalPage(memberMissionPage.getTotalPages())
                 .totalElements(memberMissionPage.getTotalElements())
-                .isFirst(memberMissionPage.isFirst())
-                .isLast(memberMissionPage.isLast())
+                .first(memberMissionPage.isFirst())
+                .last(memberMissionPage.isLast())
                 .build();
     }
 }
