@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.member.entity;
+package com.example.umc10th.domain.store.entity;
 
 import com.example.umc10th.domain.common.BaseEntity;
 import jakarta.persistence.*;
@@ -9,18 +9,17 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class MemberTerm extends BaseEntity {
+public class ReviewPhoto extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_term_id")
+    @Column(name = "review_photo_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(name = "photo_url", columnDefinition = "text")
+    private String photoUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "term_id", nullable = false)
-    private Term term;
+    @JoinColumn(name = "review_id", nullable = false)
+    private Review review;
 }

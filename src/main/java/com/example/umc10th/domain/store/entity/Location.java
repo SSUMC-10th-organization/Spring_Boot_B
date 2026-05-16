@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.member.entity;
+package com.example.umc10th.domain.store.entity;
 
 import com.example.umc10th.domain.common.BaseEntity;
 import jakarta.persistence.*;
@@ -9,13 +9,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Food extends BaseEntity {
+public class Location extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "food_id")
+    @Column(name = "location_id")
     private Long id;
 
     @Column(nullable = false)
-    private String name; 
+    private String name;
 }

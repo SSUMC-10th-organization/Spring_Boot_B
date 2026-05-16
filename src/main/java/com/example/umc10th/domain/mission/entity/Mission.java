@@ -1,4 +1,38 @@
 package com.example.umc10th.domain.mission.entity;
 
-public class Mission {
+import com.example.umc10th.domain.common.BaseEntity;
+import com.example.umc10th.domain.store.entity.Store;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class Mission extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_id")
+    private Long id;
+
+    @Column(nullable = false)
+    private LocalDate deadline;
+
+    @Column(nullable = false, columnDefinition = "text")
+    private String condition;
+
+    @Column(nullable = false)
+    private Integer point;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }
