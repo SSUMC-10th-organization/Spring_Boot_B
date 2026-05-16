@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.mission.dto.res;
 
+import com.example.umc10th.domain.mission.enums.MissionStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,10 +20,5 @@ public class MissionListResponseDTO {
     private Integer rewardPoint;
     private MissionStatus status;
     private Boolean isReviewed;
-  }
-
-  public enum MissionStatus {
-    COMPLETED,
-    FAILED
   }
 }
