@@ -1,14 +1,15 @@
 package com.example.coco.domain.mission.controller;
 
 import com.example.coco.base.ApiResponse;
+import com.example.coco.domain.mission.dto.MissionRequestDTO;
 import com.example.coco.domain.mission.dto.MissionResponseDTO;
 import com.example.coco.domain.mission.service.MissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest; // 올바른 import
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Mission API", description = "미션 목록 조회 및 진행 관련 API")
@@ -17,20 +18,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MissionController {
 
-    private final MissionService missionService; // 분리된 미션 서비스 주입
+    private final MissionService missionService;
 
-    @Operation(summary = "나의 미션 목록 조회 API", description = "진행 중이거나 완료한 미션 목록을 상태별로 조회합니다.")
+    @Operation(summary = "내가 진행중인 미션 조회하기 (오프셋)", description = "바디로 유저 ID를 받아 오프셋 방식으로 진행 중인 미션을 페이징 조회합니다.")
     @Parameters({
-            @Parameter(name = "status", description = "미션 상태 (progress: 진행중, complete: 완료)", example = "progress"),
-            @Parameter(name = "page", description = "페이지 번호 (0부터 시작)", example = "0")
+            @Parameter(name = "status", description = "미션 상태 (progress: 진행중, complete: 완료)", example = "progress")
     })
-    @GetMapping("")
-    public ApiResponse<MissionResponseDTO.MissionListDTO> getMissions(
-            @RequestParam(name = "status") String status,
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+    @PostMapping("/my-offset")
+    public ApiResponse<MissionResponseDTO.MissionListDTO> getMyMissionsOffset(
+            @Valid @RequestBody MissionRequestDTO.MyMissionOptsDTO request,
+            @RequestParam(name = "status", defaultValue = "progress") String status) {
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
-        MissionResponseDTO.MissionListDTO result = missionService.getMyMissions(1L, status, pageRequest); // 임시 사용자 ID 1L
+        MissionResponseDTO.MissionListDTO result = missionService.getMyMissionsOffset(request, status);
         return ApiResponse.onSuccess(result);
     }
 
@@ -39,7 +38,6 @@ public class MissionController {
     public ApiResponse<MissionResponseDTO.MissionCompleteResultDTO> completeMission(
             @Parameter(description = "완료 처리할 미션의 ID", example = "1") @PathVariable Long missionId) {
 
-        // 요구사항에 맞춰 형식 구조 유지를 위한 데이터 바인딩
         MissionResponseDTO.MissionCompleteResultDTO result =
                 new MissionResponseDTO.MissionCompleteResultDTO(1L, missionId, "complete", "2026-05-16T18:41:00Z");
         return ApiResponse.onSuccess(result);

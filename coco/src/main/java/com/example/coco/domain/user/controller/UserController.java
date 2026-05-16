@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService; // 분리된 유저 서비스 주입
+    private final UserService userService;
 
     @Operation(summary = "홈 화면 조회", description = "토큰 유저의 포인트 및 미션 현황을 조회합니다.")
     @GetMapping("/home")
@@ -26,14 +26,14 @@ public class UserController {
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
         PageRequest pageRequest = PageRequest.of(page, 10);
-        UserResponseDTO.HomeDTO result = userService.getHomeData(1L, pageRequest); // 임시 사용자 ID 1L
+        UserResponseDTO.HomeDTO result = userService.getHomeData(1L, pageRequest);
         return ApiResponse.onSuccess(result);
     }
 
     @Operation(summary = "마이페이지 조회", description = "유저 프로필 정보를 조회합니다.")
     @GetMapping("/mypage")
     public ApiResponse<UserResponseDTO.MyPageDTO> getMyPage() {
-        UserResponseDTO.MyPageDTO result = userService.getMyPageData(1L); // 임시 사용자 ID 1L
+        UserResponseDTO.MyPageDTO result = userService.getMyPageData(1L);
         return ApiResponse.onSuccess(result);
     }
 
