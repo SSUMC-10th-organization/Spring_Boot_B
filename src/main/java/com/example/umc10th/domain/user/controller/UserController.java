@@ -6,6 +6,7 @@ import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class UserController {
 
   @PostMapping("/onboarding")
   public ApiResponse<Void> onboarding(
-      @RequestBody OnboardingDTO request
+      @Valid @RequestBody OnboardingDTO request
       ){
     return ApiResponse.onSuccess(GeneralSuccessCode.OK, userService.onboarding());
   }

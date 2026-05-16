@@ -1,16 +1,17 @@
 package com.example.umc10th.domain.mission.entity;
 
+import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mission")
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission extends BaseEntity {
 

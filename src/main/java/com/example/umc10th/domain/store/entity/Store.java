@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.mission.entity;
+package com.example.umc10th.domain.store.entity;
 
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
