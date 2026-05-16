@@ -1,4 +1,4 @@
-package org.example.erd.domain.member.exception.code;
+package org.example.erd.domain.store.exception.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,13 +7,11 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MemberErrorCode implements BaseErrorCode {
+public enum StoreErrorCode implements BaseErrorCode {
 
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER404_1","존재하지 않는 멤버입니다."),
-    ;
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND,"STORE404_1", "존재하지 않는 가게입니다."),;
 
     private final HttpStatus status;
     private final String code;
     private final String message;
-
 }

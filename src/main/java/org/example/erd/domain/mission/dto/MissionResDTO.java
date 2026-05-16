@@ -36,4 +36,13 @@ public class MissionResDTO {
         private Long memberMissionId;
         private String status;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MissionListPageRes{
+        private List<MissionItem> missionList;
+        private Boolean hasNext;
+    }
 }
