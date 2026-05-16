@@ -16,8 +16,11 @@ import org.example.erd.domain.store.entity.Store;
 import org.example.erd.domain.store.exception.StoreException;
 import org.example.erd.domain.store.exception.code.StoreErrorCode;
 import org.example.erd.domain.store.repository.StoreRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +49,57 @@ public class ReviewService {
         return ReviewConverter.toCreateReviewRes(review);
 
 
+    }
+
+    public ReviewResDTO.Pagination<ReviewResDTO.ReviewItem> getMyReviews(
+            Long memberId,
+            Integer pageSize,
+            String cursor,
+            String query
+    ) {
+        PageRequest pageRequest = PageRequest.of(0,pageSize);
+        Slice<Review> reviewSlice;
+        String nextCursor;
+
+        if(cursor.equals("-1")) {
+            // 커서 없을 때
+            if(query.equalsIgnoreCase("score")){
+                reviewSlice = reviewRepository.findByMember_IdOrderByScoreDescIdDesc(memberId,pageRequest);
+            }
+            else{
+                reviewSlice = reviewRepository.findByMember_IdOrderByIdDesc(memberId,pageRequest);
+            }
+        }
+        else{
+            // 커서 있을 때
+            String[] parts = cursor.split(":");
+            if(query.equalsIgnoreCase("score")){
+                Float scoreCursor = Float.parseFloat(parts[1]);
+                Long idCursor = Long.parseLong(parts[2]);
+                reviewSlice = reviewRepository.findByMemberIdWithScoreCursor(memberId,scoreCursor,idCursor,pageRequest);
+            }
+            else{
+                Long idCursor = Long.parseLong(parts[1]);
+                reviewSlice = reviewRepository.findByMember_IdAndIdLessThanOrderByIdDesc(memberId,idCursor,pageRequest);
+            }
+        }
+
+        if (reviewSlice.hasNext()){
+            Review last = reviewSlice.getContent().get(reviewSlice.getContent().size() -1);
+            if(query.equalsIgnoreCase("score")) {
+                nextCursor = "score:" + last.getScore()+":"+ last.getId();
+            } else{
+                nextCursor = "id:" + last.getId();
+            }
+        }
+        else{
+            nextCursor = null;
+        }
+
+        List<ReviewResDTO.ReviewItem> items = reviewSlice.getContent().stream()
+                .map(ReviewConverter::toReviewItem)
+                .toList();
+
+        return ReviewConverter.toReviewPagination(items,reviewSlice.hasNext(),nextCursor,pageSize);
     }
 }

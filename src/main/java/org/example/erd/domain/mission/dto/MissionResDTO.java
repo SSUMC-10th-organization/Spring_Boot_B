@@ -44,5 +44,28 @@ public class MissionResDTO {
     public static class MissionListPageRes{
         private List<MissionItem> missionList;
         private Boolean hasNext;
+        private Integer currentPage;
+        private Integer totalPages;
+        private Long totalElements;
     }
+
+    // 가게 내 미션 조회
+    @Builder
+    public record GetMission(
+            Long missionId,
+            Integer point,
+            String conditional
+    ){}
+
+    // 페이지네이션 틀
+    @Builder
+    public record  Pagination<T> (
+            List<T> data,
+            Boolean hasNext,
+            String nextCursor,
+            Integer pageSize
+    ){}
+
+
+
 }
