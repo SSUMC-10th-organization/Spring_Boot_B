@@ -5,14 +5,15 @@ import com.example.umc10th.domain.mission.enums.MissionStatus;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_mission")
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserMission extends BaseEntity {
 
@@ -43,5 +44,5 @@ public class UserMission extends BaseEntity {
   private LocalDateTime completedDate;
 
   @Column(name = "is_reviewd", nullable = false)
-  private Boolean isReviewd;
+  private Boolean reviewed;
 }

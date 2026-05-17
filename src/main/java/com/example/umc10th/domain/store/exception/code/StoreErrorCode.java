@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.review.exception.code;
+package com.example.umc10th.domain.store.exception.code;
 
 import com.example.umc10th.global.apiPayload.code.BaseCode;
 import lombok.Getter;
@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum ReviewSuccessCode implements BaseCode {
-  MY_REVIEWS_OK(HttpStatus.OK, "REVIEW200_1", "내가 작성한 리뷰 목록을 조회했습니다.");
+public enum StoreErrorCode implements BaseCode {
+
+  NOT_FOUND(HttpStatus.NOT_FOUND, "STORE404_1", "해당 가게가 존재하지 않습니다");
 
   private final HttpStatus status;
   private final String code;

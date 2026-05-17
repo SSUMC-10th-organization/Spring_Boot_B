@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.review.entity;
 
-import com.example.umc10th.domain.mission.entity.Store;
+import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;

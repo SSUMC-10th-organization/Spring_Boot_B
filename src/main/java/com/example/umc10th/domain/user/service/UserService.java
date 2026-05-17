@@ -18,7 +18,9 @@ public class UserService {
   private final UserRepository userRepository;
 
   public MyPageResponseDTO getMyPage(Long userId) {
-    User user = userRepository.findById(userId)
+
+    // deletedDateIsNull 조건
+    User user = userRepository.findByIdAndDeletedAtIsNull(userId)
         .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
     return UserConverter.toMyPageResponse(user);
