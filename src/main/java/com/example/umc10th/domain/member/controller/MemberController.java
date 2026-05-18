@@ -11,11 +11,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
+@Validated
 @Tag(name = "Member API", description = "회원 관련 API")
 public class MemberController {
 
@@ -23,7 +26,7 @@ public class MemberController {
 
     @PostMapping("/")
     @Operation(summary = "회원 가입 API", description = "새로운 회원을 등록하는 API입니다.")
-    public ApiResponse<MemberResponseDTO.JoinResultDto> join(@RequestBody MemberRequestDTO.JoinDto request) {
+    public ApiResponse<MemberResponseDTO.JoinResultDto> join(@Valid @RequestBody MemberRequestDTO.JoinDto request) {
         // 더미 로직 유지
         return ApiResponse.onSuccess(MemberConverter.toJoinResultDto(1L));
     }
