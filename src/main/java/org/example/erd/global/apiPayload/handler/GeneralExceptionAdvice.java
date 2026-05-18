@@ -5,11 +5,18 @@ import org.example.erd.global.apiPayload.code.BaseErrorCode;
 import org.example.erd.global.apiPayload.code.GeneralErrorCode;
 import org.example.erd.global.apiPayload.exception.ProjectException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.View;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GeneralExceptionAdvice {
+
+
 
     // 프로젝트에서 발생한 예외 처리
     @ExceptionHandler(ProjectException.class)
@@ -34,5 +41,21 @@ public class GeneralExceptionAdvice {
                                 ex.getMessage()
                         )
                 );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Map<String,String>>> handleMethodArgumentNotBValidException(
+            MethodArgumentNotValidException e
+    ) {
+        Map<String,String> errors = new HashMap<>();
+
+        e.getBindingResult().getFieldErrors().forEach(
+                error-> errors.put(error.getField(),
+                        error.getDefaultMessage())
+        );
+
+        BaseErrorCode code = GeneralErrorCode.BAD_REQUEST;
+        return ResponseEntity.status(code.getStatus())
+                .body(ApiResponse.onFailure(code,errors));
     }
 }

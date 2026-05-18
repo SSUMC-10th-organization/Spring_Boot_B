@@ -16,7 +16,7 @@ public class MemberConverter {
                 .storeName(mission.getStore().getName())
 
                 .storeCategory(mission.getStore().getFood().getFoodType().name())
-                .missionContent(mission.getDescription())
+                .missionContent(mission.getConditional())
                 .point(mission.getPoint())
                 .build();
     }

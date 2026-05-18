@@ -29,8 +29,8 @@ public class Mission extends BaseEntity {
     @Column(name = "point",nullable = false)
     private Integer point;
 
-    @Column(name = "description",nullable = false)
-    private String description;
+    @Column(name = "conditional",nullable = false)
+    private String conditional;
 
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;

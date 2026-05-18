@@ -9,4 +9,8 @@ public class ReviewReqDTO {
             String reviewContent,
             List<String> reviewImage
     ) {}
+
+    public record GetMyReviews(
+            Long memberId
+    ){}
 }
