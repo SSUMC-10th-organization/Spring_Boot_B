@@ -4,12 +4,19 @@ import com.example.umc10th.domain.user.dto.UserReqDTO;
 import com.example.umc10th.domain.user.dto.UserResDTO;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<SignUpResDTO> signUp(@RequestBody @Valid SignUpReqDTO request) {
+        // TODO: UserService.signUp(request)
+        return null;
+    }
 
     @PostMapping("/me")
     public ApiResponse<UserResDTO.MyPageResponse> getMyPage(

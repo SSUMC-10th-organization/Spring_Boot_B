@@ -13,16 +13,24 @@ import lombok.Getter;
 public class ApiResponse<T> {
 
     @JsonProperty("isSuccess")
-    private Boolean isSuccess;
+    private final Boolean isSuccess;
 
-    private String code;
-    private String message;
+    @JsonProperty("code")
+    private final String code;
+
+    @JsonProperty("message")
+    private final String message;
+
+    @JsonProperty("result")
     private T result;
 
+
+    // 성공
     public static <T> ApiResponse<T> onSuccess(BaseSuccessCode code, T result) {
         return new ApiResponse<>(true, code.getCode(), code.getMessage(), result);
     }
 
+    // 실패
     public static <T> ApiResponse<T> onFailure(BaseErrorCode code, T result) {
         return new ApiResponse<>(false, code.getCode(), code.getMessage(), result);
     }
