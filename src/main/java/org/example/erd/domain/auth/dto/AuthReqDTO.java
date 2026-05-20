@@ -26,7 +26,10 @@ public class AuthReqDTO {
             @Schema(description = "선호하는 음식")
             List<FoodType> foodTypes,
             @Schema(description = "동의한 약관 ID 목록", example = "[1,2]")
-            List<Long> termIds
+            List<Long> termIds,
+            @Schema(description = "핸드폰 번호")
+            String phoneNumber
+
 
 
 

@@ -17,6 +17,7 @@ import org.example.erd.domain.mission.repository.MissionRepository;
 import org.example.erd.domain.store.entity.Region;
 import org.example.erd.domain.store.repository.RegionRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
@@ -32,6 +33,7 @@ public class MemberService {
     private final RegionRepository regionRepository;
     private final MemberMissionRepository memberMissionRepository;
     private final MissionRepository missionRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public MemberResDTO.MyPageRes getMyPage(Long memberId) {
         Member member = memberRepository.findById(memberId)
