@@ -1,8 +1,10 @@
 package com.example.umc10th.domain.member.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
@@ -13,6 +15,19 @@ public class MemberRequestDTO {
     @Getter
     @Schema(description = "회원 가입 요청 DTO")
     public static class JoinDto {
+        @NotBlank(message = "이메일은 필수입니다.")
+        @Email(message = "유효한 이메일 주소를 입력해주세요.")
+        @Schema(description = "이메일", example = "user@example.com")
+        private String email;
+
+        @NotBlank(message = "비밀번호는 필수입니다.")
+        @Pattern(
+                regexp = "^(?=.*[a-zA-Z])(?=.*\\d).{8,}$",
+                message = "비밀번호는 영문자와 숫자를 포함한 8자 이상이어야 합니다."
+        )
+        @Schema(description = "비밀번호 (영문+숫자 8자 이상)", example = "password123")
+        private String password;
+
         @NotBlank(message = "회원 이름은 필수입니다.")
         @Schema(description = "회원 이름", example = "홍길동")
         private String name;

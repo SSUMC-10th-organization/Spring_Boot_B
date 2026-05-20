@@ -5,6 +5,7 @@ import com.example.umc10th.domain.member.dto.MemberRequestDTO;
 import com.example.umc10th.domain.member.dto.MemberResponseDTO;
 import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.service.MemberQueryService;
+import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,13 +23,14 @@ import jakarta.validation.Valid;
 @Tag(name = "Member API", description = "회원 관련 API")
 public class MemberController {
 
+    private final MemberService memberService;
     private final MemberQueryService memberQueryService;
 
     @PostMapping("/")
     @Operation(summary = "회원 가입 API", description = "새로운 회원을 등록하는 API입니다.")
     public ApiResponse<MemberResponseDTO.JoinResultDto> join(@Valid @RequestBody MemberRequestDTO.JoinDto request) {
-        // 더미 로직 유지
-        return ApiResponse.onSuccess(MemberConverter.toJoinResultDto(1L));
+        Member newMember = memberService.join(request);
+        return ApiResponse.onSuccess(MemberConverter.toJoinResultDto(newMember.getId()));
     }
 
     @GetMapping("/{memberId}/mypage")
