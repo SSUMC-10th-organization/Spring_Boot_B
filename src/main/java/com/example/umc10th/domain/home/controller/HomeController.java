@@ -1,21 +1,21 @@
-package com.example.umc10th.domain.restaurant.controller;
+package com.example.umc10th.domain.home.controller;
 
-import com.example.umc10th.domain.restaurant.dto.RestaurantReqDTO;
-import com.example.umc10th.domain.restaurant.dto.RestaurantResDTO;
+import com.example.umc10th.domain.home.dto.HomeReqDTO;
+import com.example.umc10th.domain.home.dto.HomeResDTO;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/restaurants")
-public class RestaurantController {
+public class HomeController {
 
     @PostMapping
-    public ApiResponse<RestaurantResDTO.CreateRestaurantResponse> createRestaurant(
-            @RequestBody RestaurantReqDTO.CreateRestaurantRequest request
+    public ApiResponse<HomeResDTO.CreateRestaurantResponse> createRestaurant(
+            @RequestBody HomeReqDTO.CreateRestaurantRequest request
     ) {
-        RestaurantResDTO.CreateRestaurantResponse response =
-                RestaurantResDTO.CreateRestaurantResponse.builder()
+        HomeResDTO.CreateRestaurantResponse response =
+                HomeResDTO.CreateRestaurantResponse.builder()
                         .restaurantId(1L)
                         .name(request.name())
                         .address(request.address())
@@ -26,11 +26,11 @@ public class RestaurantController {
     }
 
     @PostMapping("/detail")
-    public ApiResponse<RestaurantResDTO.GetRestaurantResponse> getRestaurant(
-            @RequestBody RestaurantReqDTO.GetRestaurantRequest request
+    public ApiResponse<HomeResDTO.GetRestaurantResponse> getRestaurant(
+            @RequestBody HomeReqDTO.GetRestaurantRequest request
     ) {
-        RestaurantResDTO.GetRestaurantResponse response =
-                RestaurantResDTO.GetRestaurantResponse.builder()
+        HomeResDTO.GetRestaurantResponse response =
+                HomeResDTO.GetRestaurantResponse.builder()
                         .restaurantId(request.restaurantId())
                         .name("맛있는 식당")
                         .address("서울특별시 동작구")

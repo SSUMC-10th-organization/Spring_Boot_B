@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<SignUpResDTO> signUp(@RequestBody @Valid SignUpReqDTO request) {
-        // TODO: UserService.signUp(request)
-        return null;
+    public ApiResponse<UserResDTO.SignUp> signUp(
+            @RequestBody UserReqDTO.SignUpDTO request
+    ) {
+        userService.signUp(request);
+        return ApiResponse.onSuccess(GeneralSuccessCode.USER_SIGNUP_SUCCESS, null);
     }
 
     @PostMapping("/me")
