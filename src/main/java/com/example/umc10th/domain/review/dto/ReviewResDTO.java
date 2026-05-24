@@ -2,25 +2,34 @@ package com.example.umc10th.domain.review.dto;
 
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class ReviewResDTO {
 
     @Builder
     public record CreateReviewResponse(
             Long reviewId,
-            Long userId,
-            Long restaurantId,
+            LocalDateTime createdAt
+    ) {
+    }
+
+    @Builder
+    public record ReviewSummary(
+            Long reviewId,
+            String userName,
+            Float rate,
             String content,
-            Double score
+            List<String> images,
+            LocalDateTime createdAt
     ) {
     }
 
     @Builder
     public record GetReviewResponse(
-            Long reviewId,
-            String userName,
-            String restaurantName,
-            String content,
-            Double score
+            List<ReviewSummary> reviews,
+            Long nextCursor,
+            Boolean hasNext
     ) {
     }
 }

@@ -1,17 +1,27 @@
 package com.example.umc10th.domain.review.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
 public class ReviewReqDTO {
 
-    public record CreateReviewRequest(
-            Long userId,
-            Long restaurantId,
-            String content,
-            Double score
-    ) {
-    }
+    @Getter
+    public static class Create {
 
-    public record GetReviewRequest(
-            Long reviewId
-    ) {
+        @NotNull
+        private Long userMissionId;
+
+        @NotNull
+        @Min(1) @Max(5)
+        private Float rate;
+
+        private String content;             // nullable
+
+        private List<MultipartFile> images; // nullable
     }
 }

@@ -1,4 +1,5 @@
 package com.example.umc10th.domain.user.enums;
 
-public class SocialType {
+public enum SocialType {
+    KAKAO, NAVER, APPLE, GOOGLE
 }
