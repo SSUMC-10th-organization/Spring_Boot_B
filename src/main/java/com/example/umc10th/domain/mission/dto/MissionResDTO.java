@@ -38,9 +38,7 @@ public class MissionResDTO {
     @AllArgsConstructor
     public static class UserMission {
         private Long userMissionId;
-        private enum status {
-            IN_PROGRESS, COMPLETED
-        }
+        private String status;
         private LocalDateTime startedAt; // nullable
     }
 }

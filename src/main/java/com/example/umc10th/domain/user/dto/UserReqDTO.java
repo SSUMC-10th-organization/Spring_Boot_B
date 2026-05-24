@@ -1,5 +1,7 @@
 package com.example.umc10th.domain.user.dto;
 
+import com.example.umc10th.domain.user.enums.CategoryName;
+import com.example.umc10th.domain.user.enums.Gender;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -34,20 +36,10 @@ public class UserReqDTO {
         @Size(max = 30)
         private String phone;
 
-        private List<FoodCategory> foodCategories;
+        private List<CategoryName> foodCategories;
 
         @NotNull
         private List<Long> termIds;
-
-        public enum Gender {
-            MALE, FEMALE
-        }
-
-        public enum FoodCategory {
-            NONE, KOREAN, JAPANESE, CHINESE,
-            WESTERN, CHICKEN, PORK, GRILL,
-            LUNCHBOX, SNACK, FASTFOOD, DESSERT, ASIAN
-        }
     }
 
     @Getter

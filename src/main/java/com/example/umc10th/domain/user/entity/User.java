@@ -4,6 +4,10 @@ import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.domain.user.entity.mapping.UserCategory;
 import com.example.umc10th.domain.user.entity.mapping.UserTerm;
+import com.example.umc10th.domain.user.enums.Address;
+import com.example.umc10th.domain.user.enums.Gender;
+import com.example.umc10th.domain.user.enums.SocialType;
+import com.example.umc10th.domain.user.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -97,21 +101,5 @@ public class User {
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    public enum SocialType {
-        KAKAO, NAVER, APPLE, GOOGLE
-    }
-
-    public enum Gender {
-        MALE, FEMALE
-    }
-
-    public enum Address {
-        강남구, 종로구, 동작구
-    }
-
-    public enum Status {
-        ACTIVE, DELETED
     }
 }

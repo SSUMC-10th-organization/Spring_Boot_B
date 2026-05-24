@@ -1,7 +1,7 @@
 package com.example.umc10th.domain.mission.entity;
 
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
-import com.example.umc10th.domain.home.entity.Restaurant;
+import com.example.umc10th.domain.restaurant.entity.Restaurant;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.user.entity;
 
 import com.example.umc10th.domain.user.entity.mapping.UserCategory;
+import com.example.umc10th.domain.user.enums.CategoryName;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,9 +29,4 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<UserCategory> userCategories = new ArrayList<>();
 
-    public enum CategoryName {
-        NONE, KOREAN, JAPANESE, CHINESE,
-        WESTERN, CHICKEN, PORK, GRILL,
-        LUNCHBOX, SNACK, FASTFOOD, DESSERT, ASIAN
-    }
 }

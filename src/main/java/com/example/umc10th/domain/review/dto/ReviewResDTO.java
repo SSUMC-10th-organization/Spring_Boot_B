@@ -15,13 +15,21 @@ public class ReviewResDTO {
     }
 
     @Builder
-    public record GetReviewResponse(
+    public record ReviewSummary(
             Long reviewId,
             String userName,
             Float rate,
             String content,
             List<String> images,
             LocalDateTime createdAt
+    ) {
+    }
+
+    @Builder
+    public record GetReviewResponse(
+            List<ReviewSummary> reviews,
+            Long nextCursor,
+            Boolean hasNext
     ) {
     }
 }

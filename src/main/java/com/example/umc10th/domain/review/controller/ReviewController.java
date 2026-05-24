@@ -1,44 +1,54 @@
 package com.example.umc10th.domain.review.controller;
 
+import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.dto.ReviewResDTO;
-import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.domain.review.service.ReviewService;
+import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/reviews")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class ReviewController {
 
-    @PostMapping
-    public ApiResponse<ReviewResDTO.CreateReviewResponse> createReview(
-            @RequestBody ReviewReqDTO.CreateReviewRequest request
-    ) {
-        ReviewResDTO.CreateReviewResponse response =
-                ReviewResDTO.CreateReviewResponse.builder()
-                        .reviewId(1L)
-                        .userId(request.userId())
-                        .restaurantId(request.restaurantId())
-                        .content(request.content())
-                        .score(request.score())
-                        .build();
+    private final ReviewService reviewService;
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.REVIEW_CREATE_SUCCESS, response);
+    /**
+     * 리뷰 작성
+     * POST /api/v1/restaurants/{restaurantId}/reviews
+     * Header: Authorization: Bearer {token}, Content-Type: multipart/form-data
+     */
+    @PostMapping("/restaurants/{restaurantId}/reviews")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<ReviewResDTO.CreateReviewResponse> createReview(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable Long restaurantId,
+            @ModelAttribute @Valid ReviewReqDTO.Create request
+    ) {
+        Long userId = extractUserId(authorization);
+        return ApiResponse.onSuccess(GeneralSuccessCode.CREATED, reviewService.createReview(userId, restaurantId, request));
     }
 
-    @PostMapping("/detail")
-    public ApiResponse<ReviewResDTO.GetReviewResponse> getReview(
-            @RequestBody ReviewReqDTO.GetReviewRequest request
+    /**
+     * 가게 리뷰 목록 조회
+     * GET /api/v1/restaurants/{restaurantId}/reviews?cursor=10&size=10
+     */
+    @GetMapping("/restaurants/{restaurantId}/reviews")
+    public ApiResponse<ReviewResDTO.GetReviewResponse> getRestaurantReviews(
+            @PathVariable Long restaurantId,
+            @RequestParam(value = "cursor", required = false) Long cursor,
+            @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        ReviewResDTO.GetReviewResponse response =
-                ReviewResDTO.GetReviewResponse.builder()
-                        .reviewId(request.reviewId())
-                        .userName("nickname012")
-                        .restaurantName("맛있는 식당")
-                        .content("음식이 맛있고 친절했습니다.")
-                        .score(4.5)
-                        .build();
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, reviewService.getRestaurantReviews(restaurantId, cursor, size));
+    }
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.REVIEW_GET_SUCCESS, response);
+    private Long extractUserId(String authorization) {
+        // TODO: JWT 파싱 로직
+        return 1L;
     }
 }

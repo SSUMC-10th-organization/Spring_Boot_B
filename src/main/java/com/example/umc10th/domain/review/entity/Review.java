@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.review.entity;
 
-import com.example.umc10th.domain.home.entity.Restaurant;
+import com.example.umc10th.domain.restaurant.entity.Restaurant;
 import com.example.umc10th.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;

@@ -2,6 +2,7 @@ package com.example.umc10th.domain.mission.entity.mapping;
 
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.user.entity.User;
+import com.example.umc10th.domain.mission.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,9 +44,5 @@ public class UserMission {
         if (status == Status.COMPLETED) {
             this.completedAt = LocalDateTime.now();
         }
-    }
-
-    public enum Status {
-        ASSIGNED, IN_PROGRESS, COMPLETED, CANCELED
     }
 }

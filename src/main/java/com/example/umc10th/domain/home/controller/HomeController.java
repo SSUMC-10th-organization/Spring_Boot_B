@@ -1,43 +1,35 @@
 package com.example.umc10th.domain.home.controller;
 
-import com.example.umc10th.domain.home.dto.HomeReqDTO;
-import com.example.umc10th.domain.home.dto.HomeResDTO;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.domain.home.dto.HomeResDTO;
+import com.example.umc10th.domain.home.service.HomeService;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/restaurants")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class HomeController {
 
-    @PostMapping
-    public ApiResponse<HomeResDTO.CreateRestaurantResponse> createRestaurant(
-            @RequestBody HomeReqDTO.CreateRestaurantRequest request
-    ) {
-        HomeResDTO.CreateRestaurantResponse response =
-                HomeResDTO.CreateRestaurantResponse.builder()
-                        .restaurantId(1L)
-                        .name(request.name())
-                        .address(request.address())
-                        .category(request.category())
-                        .build();
+    private final HomeService homeService;
 
-        return ApiResponse.onSuccess(GeneralSuccessCode.RESTAURANT_CREATE_SUCCESS, response);
+    /**
+     * 홈 화면 조회
+     * GET /api/v1/home?location_id=1
+     * Header: Authorization: Bearer {token}
+     */
+    @GetMapping("/home")
+    public ApiResponse<HomeResDTO.Home> getHome(
+            @RequestHeader("Authorization") String authorization,
+            @RequestParam("location_id") Long locationId
+    ) {
+        Long userId = extractUserId(authorization);
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, homeService.getHome(userId, locationId));
     }
 
-    @PostMapping("/detail")
-    public ApiResponse<HomeResDTO.GetRestaurantResponse> getRestaurant(
-            @RequestBody HomeReqDTO.GetRestaurantRequest request
-    ) {
-        HomeResDTO.GetRestaurantResponse response =
-                HomeResDTO.GetRestaurantResponse.builder()
-                        .restaurantId(request.restaurantId())
-                        .name("맛있는 식당")
-                        .address("서울특별시 동작구")
-                        .category("한식")
-                        .score(4.5)
-                        .build();
-
-        return ApiResponse.onSuccess(GeneralSuccessCode.RESTAURANT_GET_SUCCESS, response);
+    private Long extractUserId(String authorization) {
+        // TODO: JWT 파싱 로직
+        return 1L;
     }
 }
