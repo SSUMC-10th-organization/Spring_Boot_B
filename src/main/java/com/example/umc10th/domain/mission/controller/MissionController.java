@@ -1,9 +1,11 @@
 package com.example.umc10th.domain.mission.controller;
 
+import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,16 +21,15 @@ public class MissionController {
      * GET /api/v1/missions/me?status=IN_PROGRESS&cursor=10&size=10
      * Header: Authorization: Bearer {token}
      */
-    @GetMapping("/me")
+    @PostMapping("/me")
     public ApiResponse<MissionResDTO.MyMissionList> getMyMissions(
-            @RequestHeader("Authorization") String authorization,
-            @RequestParam("status") String status,
-            @RequestParam(value = "cursor", required = false) Long cursor,
+            @RequestBody @Valid MissionReqDTO.MyMissionRequest request,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
-        Long userId = extractUserId(authorization);
-        return ApiResponse.onSuccess(GeneralSuccessCode.OK, missionService.getMyMissions(userId, status, cursor, size));
+        return ApiResponse.onSuccess(GeneralSuccessCode.OK, missionService.getMyMissions(request, page, size));
     }
+
         /**
      * 미션 도전 시작
      * POST /api/v1/missions/{missionId}/start

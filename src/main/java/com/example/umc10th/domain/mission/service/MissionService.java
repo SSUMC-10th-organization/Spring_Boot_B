@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.mission.service;
 
+import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.enums.Status;
@@ -9,8 +10,10 @@ import com.example.umc10th.domain.mission.repository.MissionRepository;
 import com.example.umc10th.domain.mission.repository.UserMissionRepository;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,16 +30,15 @@ public class MissionService {
     private final UserMissionRepository userMissionRepository;
     private final UserRepository userRepository;
 
-    public MissionResDTO.MyMissionList getMyMissions(Long userId, String status, Long cursor, int size) {
+    public MissionResDTO.MyMissionList getMyMissions(MissionReqDTO.MyMissionRequest request, int page, int size) {
 
-        Status missionStatus = Status.valueOf(status);
-        PageRequest pageRequest = PageRequest.of(0, size);
+        Status status = Status.valueOf(request.getStatus());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
-        Slice<UserMission> slice = (cursor == null)
-                ? userMissionRepository.findByUserIdAndStatus(userId, missionStatus, pageRequest)
-                : userMissionRepository.findByUserIdAndStatusWithCursor(userId, missionStatus, cursor, pageRequest);
+        Page<UserMission> result = userMissionRepository.findByUserIdAndStatus(
+                request.getUserId(), status, pageRequest);
 
-        List<MissionResDTO.MyMissionSummary> summaries = slice.getContent().stream()
+        List<MissionResDTO.MyMissionSummary> summaries = result.getContent().stream()
                 .map(um -> MissionResDTO.MyMissionSummary.builder()
                         .userMissionId(um.getId())
                         .missionId(um.getMission().getId())
@@ -48,14 +50,12 @@ public class MissionService {
                         .build())
                 .collect(Collectors.toList());
 
-        Long nextCursor = slice.hasNext()
-                ? slice.getContent().get(slice.getContent().size() - 1).getId()
-                : null;
-
         return MissionResDTO.MyMissionList.builder()
                 .missions(summaries)
-                .nextCursor(nextCursor)
-                .hasNext(slice.hasNext())
+                .currentPage(result.getNumber())
+                .totalPage(result.getTotalPages())
+                .totalCount(result.getTotalElements())
+                .hasNext(result.hasNext())
                 .build();
     }
 

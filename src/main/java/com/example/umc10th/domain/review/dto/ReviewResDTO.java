@@ -25,6 +25,7 @@ public class ReviewResDTO {
     ) {
     }
 
+
     @Builder
     public record GetReviewResponse(
             List<ReviewSummary> reviews,

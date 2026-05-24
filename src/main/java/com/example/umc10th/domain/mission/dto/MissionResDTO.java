@@ -15,7 +15,9 @@ public class MissionResDTO {
     @AllArgsConstructor
     public static class MyMissionList {
         private List<MyMissionSummary> missions;
-        private Long nextCursor;        // nullable
+        private int currentPage;
+        private int totalPage;
+        private long totalCount;
         private boolean hasNext;
     }
 
