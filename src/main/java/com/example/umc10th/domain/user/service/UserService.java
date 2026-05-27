@@ -1,13 +1,17 @@
 package com.example.umc10th.domain.user.service;
 
 import com.example.umc10th.domain.user.converter.UserConverter;
+import com.example.umc10th.domain.user.dto.req.LoginReqDTO;
 import com.example.umc10th.domain.user.dto.req.SignUpReqDTO;
+import com.example.umc10th.domain.user.dto.res.LoginResDTO;
 import com.example.umc10th.domain.user.dto.res.MyPageResponseDTO;
 import com.example.umc10th.domain.user.dto.res.SignUpResDTO;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
+import com.example.umc10th.global.security.AuthMember;
+import com.example.umc10th.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final JwtUtil jwtUtil;
 
   public MyPageResponseDTO getMyPage(Long userId) {
 
@@ -50,5 +55,33 @@ public class UserService {
 
     // 응답 DTO 변환
     return UserConverter.toSignUpResponse(saved);
+  }
+
+  public LoginResDTO login(LoginReqDTO request) {
+    // 1. 이메일로 유저 조회
+    User user = userRepository.findByEmail(request.getEmail())
+        .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+    // 2. 비밀번호 비교
+    if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+      throw new UserException(UserErrorCode.INVALID_PASSWORD);
+    }
+
+    // 3. AuthMember 생성
+    AuthMember authMember = AuthMember.builder()
+        .id(user.getId())
+        .email(user.getEmail())
+        .password(user.getPassword())
+        .role("ROLE_USER")
+        .build();
+
+    // 4. JWT 발급
+    String accessToken = jwtUtil.createAccessToken(authMember);
+
+    // 5. 응답 DTO
+    return LoginResDTO.builder()
+        .accessToken(accessToken)
+        .tokenType("Bearer")
+        .build();
   }
 }

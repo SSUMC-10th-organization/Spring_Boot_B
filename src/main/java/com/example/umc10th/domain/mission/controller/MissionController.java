@@ -16,12 +16,14 @@ import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import com.example.umc10th.global.security.AuthMember;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -89,20 +91,20 @@ public class MissionController {
     // 진행 중인 미션 목록 조회
     @GetMapping("/users/mission/in-porgress")
     public ApiResponse<MissionResDTO.Pagination<MissionResDTO.InProgressItem>> getInProgressMissions(
-        @Valid @RequestBody MissionReqDTO.InProgress dto,
+        @AuthenticationPrincipal AuthMember authMember,
         @RequestParam Integer pageNumber,
         @RequestParam Integer pageSize
     ){
         return ApiResponse.onSuccess(
             MissionSuccessCode.IN_PROGRESS_OK,
-            missionService.getInProgressMissions(dto.userId(), pageNumber, pageSize)
+            missionService.getInProgressMissions(authMember.getId(), pageNumber, pageSize)
         );
     }
 
     // 내가 쓴 리뷰 조회 (커서 페이지네이션)
     @GetMapping("/users/reviews/my")
     public ApiResponse<ReviewResDTO.CursorPage<ReviewResDTO.MyReviewItem>> getMyReviews(
-        @Valid @RequestBody ReviewMyReqDTO dto,
+        @AuthenticationPrincipal AuthMember authMember,
         @RequestParam(defaultValue = "ID") ReviewSortType sort,
         @RequestParam(required = false) Long cursorId,
         @RequestParam(required = false) Integer cursorRating,
@@ -110,7 +112,7 @@ public class MissionController {
     ) {
         return ApiResponse.onSuccess(
             ReviewSuccessCode.MY_REVIEWS_OK,
-            reviewService.getMyReviews(dto.userId(), sort, cursorId, cursorRating, size)
+            reviewService.getMyReviews(authMember.getId(), sort, cursorId, cursorRating, size)
         );
     }
 }
