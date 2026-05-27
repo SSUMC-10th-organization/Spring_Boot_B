@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
     @Column(name = "phone_number", length = 11)
     private String phoneNumber;
 
-    @Column(name = "profile_url", columnDefinition = "text")
+    @Column(name = "profile_url", columnDefinition = "text null")
     private String profileUrl;
 
     @Column(name = "deleted_at")

@@ -59,4 +59,17 @@ public class MemberRequestDTO {
         @Schema(description = "선호하는 음식 카테고리 ID 리스트", example = "[1, 2, 3]")
         private List<Long> preferCategory;
     }
+
+    @Getter
+    @Schema(description = "로그인 요청 DTO")
+    public static class LoginDto {
+        @NotBlank(message = "이메일은 필수입니다.")
+        @Email(message = "유효한 이메일 주소를 입력해주세요.")
+        @Schema(description = "이메일", example = "user@example.com")
+        private String email;
+
+        @NotBlank(message = "비밀번호는 필수입니다.")
+        @Schema(description = "비밀번호", example = "password123")
+        private String password;
+    }
 }
