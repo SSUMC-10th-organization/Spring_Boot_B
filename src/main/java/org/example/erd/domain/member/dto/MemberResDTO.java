@@ -46,4 +46,12 @@ public class MemberResDTO {
         private String phoneNumber;
         private Integer point;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Login {
+        private String accessToken;
+    }
 }

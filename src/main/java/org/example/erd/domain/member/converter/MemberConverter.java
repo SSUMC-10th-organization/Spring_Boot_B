@@ -4,9 +4,12 @@ import org.example.erd.domain.member.dto.MemberResDTO;
 import org.example.erd.domain.member.entity.Member;
 import org.example.erd.domain.mission.entity.Mission;
 import org.example.erd.domain.mission.entity.mapping.MemberMission;
+import org.example.erd.global.security.dto.OAuthDTO;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public class MemberConverter {
 
@@ -48,6 +51,27 @@ public class MemberConverter {
                 .challengingMissions(challenging)
                 .availableMissions(available)
                 .hasNext(availalblePage.hasNext())
+                .build();
+    }
+
+    public static Member toMember(OAuthDTO dto) {
+        return Member.builder()
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .password(UUID.randomUUID().toString())
+                .phoneNumber("")
+                .birth(LocalDate.now())
+                .address("")
+                .detailAddress("")
+                .point(0)
+                .socialType(dto.getSocialType())
+                .socialUid(dto.getSocialUid())
+                .build();
+    }
+
+    public static MemberResDTO.Login toLogin(String accessToken) {
+        return MemberResDTO.Login.builder()
+                .accessToken(accessToken)
                 .build();
     }
 

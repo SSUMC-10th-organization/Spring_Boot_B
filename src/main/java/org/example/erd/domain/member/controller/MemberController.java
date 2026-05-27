@@ -7,8 +7,10 @@ import org.example.erd.domain.member.dto.MemberResDTO;
 import org.example.erd.domain.member.exception.code.MemberSuccessCode;
 import org.example.erd.domain.member.service.MemberService;
 import org.example.erd.global.apiPayload.ApiResponse;
+import org.example.erd.global.security.entity.AuthMember;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,13 +31,13 @@ public class MemberController {
     }
 
     @Operation(summary = "마이페이지 조회", description = "닉네임, 이메일, 핸드폰 번호, 포인트를 조회합니다.")
-    @GetMapping("{memberId}/my-page")
+    @GetMapping("/my-page")
     public ApiResponse<MemberResDTO.MyPageRes> getMyPage(
-            @PathVariable Long memberId
-    ) {
+            @AuthenticationPrincipal AuthMember authMember
+            ) {
         return ApiResponse.onSuccess(
                 MemberSuccessCode.MY_PAGE_SUCCESS,
-                memberService.getMyPage(memberId)
+                memberService.getMyPage(authMember.getMember())
         );
     }
 

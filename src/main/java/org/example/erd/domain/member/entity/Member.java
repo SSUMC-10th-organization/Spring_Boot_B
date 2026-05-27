@@ -45,6 +45,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(name = "social_uid")
+    private String socialUid;
+
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
