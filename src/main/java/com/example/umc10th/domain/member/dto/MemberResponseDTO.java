@@ -26,6 +26,18 @@ public class MemberResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "로그인 응답 DTO")
+    public static class LoginResultDto {
+        @Schema(description = "JWT Access Token")
+        private String accessToken;
+        @Schema(description = "토큰 타입", example = "Bearer")
+        private String tokenType;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Schema(description = "마이페이지 조회 응답 DTO")
     public static class MyPageDto {
         @Schema(description = "회원 ID", example = "1")

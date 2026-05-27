@@ -1,5 +1,6 @@
 package com.example.umc10th.global.apiPayload.exception;
 
+import com.example.umc10th.domain.member.exception.MemberException;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
 import com.example.umc10th.global.apiPayload.code.status.ErrorStatus;
@@ -23,6 +24,12 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
+    }
+
+    @ExceptionHandler(MemberException.class)
+    public ResponseEntity<Object> onMemberException(MemberException e, WebRequest request) {
+        BaseErrorCode code = e.getCode();
+        return handleExceptionInternal(e, code, HttpHeaders.EMPTY, request);
     }
 
     @ExceptionHandler(GeneralException.class)

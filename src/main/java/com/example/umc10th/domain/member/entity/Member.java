@@ -21,6 +21,12 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(nullable = false, length = 50, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
     @Column(nullable = false, length = 5)
     private String name;
 
@@ -34,10 +40,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
-    @Column(name = "detail_address", nullable = false, length = 255)
+    @Column(name = "detail_address", length = 255)
     private String detailAddress;
 
-    @Column(name = "social_uid", nullable = false, length = 255)
+    @Column(name = "social_uid", length = 255)
     private String socialUid;
 
     @Enumerated(EnumType.STRING)
@@ -47,13 +53,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Integer point;
 
-    @Column(nullable = false, length = 50)
-    private String email;
-
     @Column(name = "phone_number", length = 11)
     private String phoneNumber;
 
-    @Column(name = "profile_url", nullable = false, columnDefinition = "text")
+    @Column(name = "profile_url", columnDefinition = "text null")
     private String profileUrl;
 
     @Column(name = "deleted_at")
