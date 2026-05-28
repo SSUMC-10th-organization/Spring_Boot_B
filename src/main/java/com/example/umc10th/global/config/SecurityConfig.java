@@ -24,7 +24,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/auth/**"
+            "/auth/**",
+            "/api/v1/auth/**"
     };
 
     @Bean
@@ -39,6 +40,8 @@ public class SecurityConfig {
                         // 그 외 API는 인증 필요
                         .anyRequest().authenticated()
                 )
+
+                .csrf(AbstractHttpConfigurer::disable)
 
                 // 폼 로그인
                 .formLogin(AbstractHttpConfigurer::disable)

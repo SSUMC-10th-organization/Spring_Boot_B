@@ -45,4 +45,15 @@ public class UserController {
                 userService.getMyProfile(authUser.getUserId())
         );
     }
+
+    @PostMapping("/auth/login")
+    public ApiResponse<UserResDTO.Login> login(
+            @RequestBody UserReqDTO.Login request
+    ) {
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                userService.login(request)
+        );
+    }
+
 }

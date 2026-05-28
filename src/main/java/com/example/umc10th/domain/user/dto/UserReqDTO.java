@@ -19,6 +19,9 @@ public class UserReqDTO {
         private String name;
 
         @NotNull
+        private String password;
+
+        @NotNull
         private Gender gender;
 
         @NotNull

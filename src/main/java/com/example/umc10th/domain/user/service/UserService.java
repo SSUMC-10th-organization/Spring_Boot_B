@@ -9,8 +9,12 @@ import com.example.umc10th.domain.user.entity.mapping.UserTerm;
 import com.example.umc10th.domain.user.enums.Address;
 import com.example.umc10th.domain.user.enums.CategoryName;
 import com.example.umc10th.domain.user.enums.Gender;
+import com.example.umc10th.domain.user.enums.SocialType;
 import com.example.umc10th.domain.user.repository.*;
+import com.example.umc10th.global.security.auth.AuthUser;
+import com.example.umc10th.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class UserService {
 
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final TermRepository termRepository;
     private final UserTermRepository userTermRepository;
@@ -34,6 +40,9 @@ public class UserService {
         // 유저 생성
         User user = User.builder()
                 .name(request.getName())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .socialType(SocialType.LOCAL)
+                .socialId(0L)
                 .gender(Gender.valueOf(request.getGender().name()))
                 .birth(request.getBirth())
                 .address(request.getAddress() != null ? Address.valueOf(request.getAddress()) : null)
@@ -81,6 +90,21 @@ public class UserService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .myPoint(user.getPoint())
+                .build();
+    }
+
+    public UserResDTO.Login login(UserReqDTO.Login request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        String accessToken = jwtUtil.createAccessToken(new AuthUser(user));
+
+        return UserResDTO.Login.builder()
+                .accessToken(accessToken)
                 .build();
     }
 }
