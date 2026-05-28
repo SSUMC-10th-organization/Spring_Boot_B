@@ -14,6 +14,7 @@ public class UserResDTO {
     public static class SignUp {
         private Long userId;
         private String name;
+
         private LocalDateTime createdAt;
     }
 
@@ -28,5 +29,11 @@ public class UserResDTO {
         private Integer myPoint;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class Login {
+        private String accessToken;
+    }
 
 }

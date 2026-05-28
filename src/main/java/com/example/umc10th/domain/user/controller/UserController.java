@@ -5,9 +5,11 @@ import com.example.umc10th.domain.user.dto.UserReqDTO;
 import com.example.umc10th.domain.user.dto.UserResDTO;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import com.example.umc10th.global.security.auth.AuthUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -36,15 +38,22 @@ public class UserController {
      */
     @GetMapping("/users/me")
     public ApiResponse<UserResDTO.MyPage> getMyProfile(
-            @RequestHeader("Authorization") String authorization
+            @AuthenticationPrincipal AuthUser authUser
     ) {
-        // TODO: JWT에서 userId 추출 → Spring Security 도입 후 @AuthenticationPrincipal로 교체
-        Long userId = extractUserId(authorization);
-        return ApiResponse.onSuccess(GeneralSuccessCode.OK, userService.getMyProfile(userId));
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                userService.getMyProfile(authUser.getUserId())
+        );
     }
 
-    private Long extractUserId(String authorization) {
-        // TODO: JWT 파싱 로직
-        return 1L;
+    @PostMapping("/auth/login")
+    public ApiResponse<UserResDTO.Login> login(
+            @RequestBody UserReqDTO.Login request
+    ) {
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                userService.login(request)
+        );
     }
+
 }

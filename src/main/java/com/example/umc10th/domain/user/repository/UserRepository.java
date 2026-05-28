@@ -11,6 +11,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findBySocialTypeAndSocialId(SocialType socialType, Long socialId);
     // 소셜 로그인할 때 이미 가입한 유저인지 확인
 
+    Optional<User> findByEmail(String email);
+
     boolean existsByEmail(String email);
     // 이메일 중복 체크
 }
