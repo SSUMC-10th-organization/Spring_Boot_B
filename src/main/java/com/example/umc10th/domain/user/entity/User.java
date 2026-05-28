@@ -29,6 +29,8 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;

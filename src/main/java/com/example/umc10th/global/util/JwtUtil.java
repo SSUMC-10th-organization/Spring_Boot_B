@@ -1,11 +1,13 @@
 package com.example.umc10th.global.util;
 
+import com.example.umc10th.global.security.auth.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -30,8 +32,8 @@ public class JwtUtil {
     }
 
     // AccessToken 생성
-    public String createAccessToken(AuthMember member) {
-        return createToken(member, accessExpiration);
+    public String createAccessToken(AuthUser user) {
+        return createToken(user, accessExpiration);
     }
 
     /** 토큰에서 이메일 가져오기
@@ -62,18 +64,18 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    private String createToken(AuthMember member, Duration expiration) {
+    private String createToken(AuthUser user, Duration expiration) {
         Instant now = Instant.now();
 
         // 인가 정보
-        String authorities = member.getAuthorities().stream()
+        String authorities = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .subject(member.getUsername()) // User 이메일을 Subject로
+                .subject(user.getUsername()) // User 이메일을 Subject로
                 .claim("role", authorities)
-                .claim("email", member.getUsername())
+                .claim("email", user.getUsername())
                 .issuedAt(Date.from(now)) // 언제 발급한지
                 .expiration(Date.from(now.plus(expiration))) // 언제까지 유효한지
                 .signWith(secretKey) // sign할 Key
