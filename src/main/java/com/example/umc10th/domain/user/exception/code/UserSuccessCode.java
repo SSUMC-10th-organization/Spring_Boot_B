@@ -1,5 +1,17 @@
 package com.example.umc10th.domain.user.exception.code;
 
-public enum UserSuccessCode {
+import com.example.umc10th.global.apiPayload.code.BaseCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
+@Getter
+@RequiredArgsConstructor
+public enum UserSuccessCode implements BaseCode {
+
+  SIGN_UP_SUCCESS(HttpStatus.CREATED, "USER201_1", "회원가입에 성공했습니다");
+
+  private final HttpStatus status;
+  private final String code;
+  private final String message;
 }

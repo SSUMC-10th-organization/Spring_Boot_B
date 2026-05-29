@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
-  private UserService userService;
+  private final UserService userService;
 
   @PostMapping("/onboarding")
   public ApiResponse<Void> onboarding(

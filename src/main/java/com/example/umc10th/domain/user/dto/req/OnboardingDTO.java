@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@NoArgsConstructor
 public class OnboardingDTO {
 
   @NotBlank(message = "이름은 필수입니다")

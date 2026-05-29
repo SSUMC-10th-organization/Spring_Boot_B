@@ -23,26 +23,32 @@ public class User extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
+  @Column()
   private String name;
 
-  @Column(name = "gender", nullable = false)
+  @Column(nullable = false, unique = true, length = 100)
+  private String email;
+
+  @Column(nullable = false)
+  private String password;
+
+  @Column(name = "gender")
   @Enumerated(EnumType.STRING)
   private Gender gender;
 
-  @Column(name = "birth_date", nullable = false)
+  @Column(name = "birth_date")
   private LocalDate birthDate;
 
-  @Column(nullable = false)
+  @Column()
   private String address;
 
   @Column(name = "detail_address")
   private String detailAddress;
 
-  @Column(name = "agree_location", nullable = false)
+  @Column(name = "agree_location")
   private Boolean agreeLocation;
 
-  @Column(name = "agree_marketing", nullable = false)
+  @Column(name = "agree_marketing")
   private Boolean agreeMarketing;
 
   @Column(name = "current_point")
@@ -51,4 +57,10 @@ public class User extends BaseEntity {
   @Column(name = "completed_count")
   private Long completedCount;
 
+  public static User signUp(String email, String encodedPassword) {
+    User user = new User();
+    user.email = email;
+    user.password = encodedPassword;
+    return user;
+  }
 }

@@ -36,7 +36,7 @@ public class GeneralExceptionAdvice {
         ));
   }
 
-  // @Valid 어노테이션 검증 실패 예외
+  // @Valid 어노테이션 검증 실패 예외\
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponse<Map<String, String>>> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException e
