@@ -1,26 +1,40 @@
 package org.example.erd.global.config;
 
+import lombok.RequiredArgsConstructor;
+import org.example.erd.global.security.filter.JwtAuthFilter;
 import org.example.erd.global.security.handler.CustomAccessDenied;
 import org.example.erd.global.security.handler.CustomEntryPoint;
+import org.example.erd.global.security.handler.OAuthSuccessHandler;
+import org.example.erd.global.security.service.CustomOAuthService;
+import org.example.erd.global.security.service.CustomUserDetailsService;
+import org.example.erd.global.security.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtUtil jwtUtil;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuthService customOAuthService;
+
     private final String[] allowUris = {
-            // Swagger 허용
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/api/v1/auth/**"
+            "/api/v1/auth/**",
+            "/login/oauth2/**",
+            "/oauth2/**"
     };
 
     @Bean
@@ -35,6 +49,21 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .permitAll()
                 )
+                // 세션: OAuth2는 state 파라미터 저장에 세션이 필요하므로 IF_REQUIRED 사용
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
+
+                // OAuth2 로그인
+                .oauth2Login(oauth -> oauth
+                        .successHandler(oAuthSuccessHandler())
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuthService)
+                        )
+                )
+
+                // JWT 필터
+                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
@@ -55,7 +84,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public CustomAccessDenied customAccessDenied() {
         return new CustomAccessDenied();
@@ -64,5 +92,15 @@ public class SecurityConfig {
     @Bean
     public CustomEntryPoint customEntryPoint() {
         return new CustomEntryPoint();
+    }
+
+    @Bean
+    public JwtAuthFilter jwtAuthFilter() {
+        return new JwtAuthFilter(jwtUtil, customUserDetailsService);
+    }
+
+    @Bean
+    public OAuthSuccessHandler oAuthSuccessHandler() {
+        return new OAuthSuccessHandler(jwtUtil);
     }
 }

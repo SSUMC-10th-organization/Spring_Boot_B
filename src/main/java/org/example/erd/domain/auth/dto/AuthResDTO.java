@@ -4,4 +4,8 @@ public class AuthResDTO {
     public record SignUpRes(
             Long memberId
     ){}
+
+    public record LoginRes(
+            String accessToken
+    ){}
 }

@@ -36,6 +36,13 @@ public class AuthReqDTO {
 
 
     ) {}
+    public record LoginDTO(
+            @Schema(description = "사용자 이메일", example = "UMC@gmail.com")
+            String email,
+            @Schema(description = "사용자 비밀번호")
+            String password
+    ) {}
+
     public record SocialSignUpDTO(
             @Schema(description = "이름")
             String name,

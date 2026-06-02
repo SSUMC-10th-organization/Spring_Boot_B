@@ -35,9 +35,7 @@ public class MemberService {
     private final MissionRepository missionRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberResDTO.MyPageRes getMyPage(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+    public MemberResDTO.MyPageRes getMyPage(Member member) {
 
         return MemberConverter.toMyPageRes(member);
 

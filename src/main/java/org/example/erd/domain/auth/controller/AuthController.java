@@ -24,8 +24,12 @@ public class AuthController {
     @Operation(summary = "회원가입", description = "새로운 회원을 등록합니다.")
     @PostMapping("/signup")
     public ApiResponse<AuthResDTO.SignUpRes> signUp(@RequestBody AuthReqDTO.SignUpDTO request) {
-        return ApiResponse.onSuccess(AuthSuccessCode.SIGNUP_SUCCESS,authService.signUp(request));
+        return ApiResponse.onSuccess(AuthSuccessCode.SIGNUP_SUCCESS, authService.signUp(request));
     }
 
-
+    @Operation(summary = "로그인", description = "이메일과 비밀번호로 로그인하고 JWT 토큰을 발급받습니다.")
+    @PostMapping("/login")
+    public ApiResponse<AuthResDTO.LoginRes> login(@RequestBody AuthReqDTO.LoginDTO request) {
+        return ApiResponse.onSuccess(AuthSuccessCode.LOGIN_SUCCESS, authService.login(request));
+    }
 }
