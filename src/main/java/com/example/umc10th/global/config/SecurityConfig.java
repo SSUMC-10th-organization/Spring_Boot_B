@@ -1,7 +1,9 @@
 package com.example.umc10th.global.config;
 
+import com.example.umc10th.global.security.filter.JwtAuthFilter;
 import com.example.umc10th.global.security.handler.CustomAccessDeniedHandler;
 import com.example.umc10th.global.security.handler.CustomEntryPoint;
+import com.example.umc10th.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -20,6 +23,8 @@ public class SecurityConfig {
 
   private final CustomEntryPoint authenticationEntryPoint;
   private final CustomAccessDeniedHandler accessDeniedHandler;
+
+  private final JwtAuthFilter jwtAuthFilter;
 
   private final String[] allowUris = {
       // Swagger 허용
@@ -45,7 +50,8 @@ public class SecurityConfig {
         .exceptionHandling(exception -> exception
             .authenticationEntryPoint(authenticationEntryPoint)
             .accessDeniedHandler(accessDeniedHandler)
-        );
+        )
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
@@ -54,4 +60,5 @@ public class SecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
 }

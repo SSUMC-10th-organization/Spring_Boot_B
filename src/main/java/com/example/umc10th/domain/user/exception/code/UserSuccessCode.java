@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum UserSuccessCode implements BaseCode {
 
-  SIGN_UP_SUCCESS(HttpStatus.CREATED, "USER201_1", "회원가입에 성공했습니다");
+  SIGN_UP_SUCCESS(HttpStatus.CREATED, "USER201_1", "회원가입에 성공했습니다"),
+  LOGIN_SUCCESS(HttpStatus.OK, "USER200_1", "로그인에 성공했습니다");
 
   private final HttpStatus status;
   private final String code;

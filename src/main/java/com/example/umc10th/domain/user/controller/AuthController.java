@@ -1,6 +1,8 @@
 package com.example.umc10th.domain.user.controller;
 
+import com.example.umc10th.domain.user.dto.req.LoginReqDTO;
 import com.example.umc10th.domain.user.dto.req.SignUpReqDTO;
+import com.example.umc10th.domain.user.dto.res.LoginResDTO;
 import com.example.umc10th.domain.user.dto.res.SignUpResDTO;
 import com.example.umc10th.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th.domain.user.service.UserService;
@@ -26,6 +28,16 @@ public class AuthController {
     return ApiResponse.onSuccess(
         UserSuccessCode.SIGN_UP_SUCCESS,
         userService.signUp(request)
+    );
+  }
+
+  @PostMapping("/login")
+  public ApiResponse<LoginResDTO> login(
+      @Valid @RequestBody LoginReqDTO request
+  ) {
+    return ApiResponse.onSuccess(
+        UserSuccessCode.LOGIN_SUCCESS,
+        userService.login(request)
     );
   }
 }
